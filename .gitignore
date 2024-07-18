@@ -7,3 +7,4 @@
 0_automation_scritps/Terraform/.terraform/providers/registry.terraform.io/telmate/proxmox/3.0.1-rc1/windows_amd64/README.md
 0_automation_scritps/Terraform/.terraform/providers/registry.terraform.io/telmate/proxmox/3.0.1-rc1/windows_amd64/LICENSE
 0_automation_scritps/Terraform/.terraform.lock.hcl
+.env
