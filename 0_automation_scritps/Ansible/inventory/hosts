@@ -1,0 +1,11 @@
+[all]
+msrl-home-01v ansible_host=172.16.150.101
+msrl-home-02v ansible_host=172.16.150.102
+msrl-monitor-01v ansible_host=172.16.150.201
+
+[home]
+msrl-home-01v ansible_host=172.16.150.101
+msrl-home-02v ansible_host=172.16.150.102
+
+[monitor]
+msrl-monitor-01v ansible_host=172.16.150.201
