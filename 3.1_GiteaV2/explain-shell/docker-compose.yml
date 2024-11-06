@@ -1,0 +1,16 @@
+version: '2'
+services:
+  db:
+    image: mongo
+  web:
+    build: ./data
+    command: make serve
+    environment:
+      - MONGO_URI=mongodb://db
+      - HOST_IP=0.0.0.0
+    volumes:
+      - ./data:/opt/webapp
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db

@@ -1,0 +1,158 @@
+auto lo
+iface lo inet loopback
+
+#############################################################
+#Physical Interfaces Zone Start
+#############################################################
+
+auto enp5s0
+
+auto enp4s0f0
+
+auto enp4s0f1
+
+iface enp5s0 inet manual
+
+iface enp4s0f0 inet manual
+
+iface enp4s0f1 inet manual
+
+
+#############################################################
+#Physical Interfaces Zone End
+#############################################################
+
+#############################################################
+#Virtual bridge Interfaces Zone Start
+#############################################################
+
+#############################################################
+#SP0 - Zone Start
+#############################################################
+auto vmbr0
+iface vmbr0 inet manual
+        bridge-ports enp5s0
+        bridge-stp off
+        bridge-fd 0
+        bridge-vlan-aware yes
+        bridge-vids 2-4094
+
+#############################################################
+#OSPF Zone Start
+#############################################################
+
+#SP0 | OSPF
+auto vmbr0.1
+iface vmbr0.1 inet manual
+
+#SP1 | OSPF
+auto vmbr0.2
+iface vmbr0.2 inet manual
+
+#SP2 | OSPF
+auto vmbr0.3
+iface vmbr0.3 inet manual
+
+#SP3 | OSPF
+auto vmbr0.4
+iface vmbr0.4 inet manual
+
+#############################################################
+#OSPF Zone End
+#############################################################
+
+#SP0 | MGMT
+auto vmbr0.10
+iface vmbr0.10 inet static
+        address 192.168.10.5/24
+
+#SP0 | Cluster
+auto vmbr0.20
+iface vmbr0.20 inet static
+        address 172.16.20.50/24
+
+#SP0 | CORE
+auto vmbr0.100
+iface vmbr0.100 inet manual
+        address 172.16.100.150/24
+        gateway 172.16.100.254
+
+#SP0 | DEV
+auto vmbr0.110
+iface vmbr0.110 inet manual
+
+#SP0 | HOME
+auto vmbr0.120
+iface vmbr0.120 inet manual
+
+#SP0 | PROD
+auto vmbr0.130
+iface vmbr0.130 inet manual
+
+#############################################################
+#SP0 - Zone End
+#############################################################
+#############################################################
+#SP1 - Zone Start
+#############################################################
+auto vmbr1
+iface vmbr1 inet manual
+        bridge-ports enp4s0f0
+        bridge-stp off
+        bridge-fd 0
+        bridge-vlan-aware yes
+        bridge-vids 2-4094
+
+#SP1 | CORE
+auto vmbr1.200
+iface vmbr1.200 inet manual
+        address 172.16.200.1/24
+        #gateway 172.16.200.254
+
+#SP1 | DEV
+auto vmbr1.210
+iface vmbr1.210 inet manual
+
+#SP1 | PROD
+auto vmbr1.220
+iface vmbr1.220 inet manual
+
+#############################################################
+#SP1 - Zone End
+#############################################################
+#############################################################
+#SP2 - Zone Start
+#############################################################
+auto vmbr2
+iface vmbr2 inet manual
+        bridge-ports enp4s0f1
+        bridge-stp off
+        bridge-fd 0
+        bridge-vlan-aware yes
+        bridge-vids 2-4094
+
+#SP2 | CORE
+auto vmbr2.300
+iface vmbr1.300 inet manual
+        address 172.16.30.1/24
+        #gateway 172.16.30.254
+
+#SP2 | DEV
+auto vmbr2.310
+iface vmbr1.310 inet manual
+
+#SP2 | PROD
+auto vmbr2.320
+iface vmbr1.320 inet manual
+
+#############################################################
+#SP2 - Zone End
+#############################################################
+
+#############################################################
+#Virtual Bridge Interfaces - Zone End
+#############################################################
+
+source /etc/network/interfaces.d/*
+
+#EOF

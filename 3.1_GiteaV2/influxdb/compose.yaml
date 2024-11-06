@@ -1,0 +1,13 @@
+version: "3"
+volumes:
+  influxdb-data:
+    driver: local
+services:
+  influxdb:
+    container_name: influxdb
+    image: influxdb:latest
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - ./influxdb2/data:/etc/influxdb2

@@ -1,0 +1,44 @@
+version: "3"
+services:
+  openldap:
+    container_name: openldap
+    image: osixia/openldap:latest
+    ports:
+      - 389:389
+      - 636:636
+    volumes:
+      - ./openldap/certificates:/container/service/slapd/assets/certs
+      - ./openldap/slapd/database:/var/lib/ldap
+      - ./openldap/slapd/config:/etc/ldap/slapd.d
+    environment:
+      PUID: 999
+      PGID: 995
+      LDAP_ORGANISATION: msrls
+      LDAP_DOMAIN: msrls.net
+      LDAP_ADMIN_USERNAME: admin
+      LDAP_ADMIN_PASSWORD: Admin015
+      LDAP_CONFIG_PASSWORD: Admin015.
+      LDAP_BASE_DN: dc=msrls,dc=net
+      LDAP_TLS_CRT_FILENAME: server.crt
+      LDAP_TLS_KEY_FILENAME: server.key
+      LDAP_TLS_CA_CRT_FILENAME: msrls.net.ca.crt
+    restart: unless-stopped
+  ldapadmin:
+    container_name: ldapadmin
+    image: osixia/phpldapadmin:latest
+    ports:
+      - 8399:80
+    environment:
+      PUID: 999
+      PGID: 995
+      PHPLDAPADMIN_LDAP_HOSTS: openldap
+      PHPLDAPADMIN_HTTPS: false
+    volumes:
+      - ./phpldap/admin:/var/www/phpldapadmin # used to be able to make edits to the config file 
+    depends_on:
+      - openldap
+    restart: unless-stopped
+networks: {}
+x-dockge:
+  urls:
+    - https://ldap.auth.msrls.net/

@@ -1,0 +1,47 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/settings
+
+title: MSRLS Master Dash
+favicon: https://gitea.dev.msrls.net/MistyDev/msrls-assets/raw/branch/main/favicon.ico
+background:
+  image: https://steamcdn-a.akamaihd.net/steamcommunity/public/images/items/672590/ad0267e4a71c6ab2fb297c79c7bc4b54214e955c.jpg
+  blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+  saturate: 50 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+  brightness: 50 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+  opacity: 50 # 0-100
+
+theme: dark
+color: blue
+headerStyle: underlined
+disableCollapse: true
+hideVersion: true
+
+providers:
+  openweathermap: openweathermapapikey
+  weatherapi: weatherapiapikey
+
+useEqualHeights: true
+layout:
+  Networking:
+    header: true
+    icon: mdi-server
+    style: row
+    columns: 4
+  Proxmox Cluster:
+    header: true
+    icon: mdi-server
+    style: row
+    columns: 3
+  Systems:
+    icon: mdi-cog
+    style: row
+    columns: 3
+  Developer Apps:
+    icon: mdi-apps
+    sytle: row
+    columns: 1
+  Monitoring Apps:
+    icon: mdi-apps
+    sytle: row
+    columns: 1

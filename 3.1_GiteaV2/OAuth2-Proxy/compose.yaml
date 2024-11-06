@@ -1,0 +1,22 @@
+version: '3.0'
+services:
+  oauth2-proxy:
+    container_name: oauth2-proxy
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.7.1
+    command: --config /oauth2-proxy.cfg
+    hostname: oauth2-proxy
+    volumes:
+      - "./conf/oauth2-proxy-keycloak.cfg:/oauth2-proxy.cfg"
+    restart: unless-stopped
+    ports:
+      - 4180:4180/tcp
+    depends_on:
+      - httpbin
+
+  httpbin:
+    container_name: httpbin
+    image: kennethreitz/httpbin:latest
+    hostname: httpbin
+    ports:
+      - 8081:80/tcp
+networks: {}

@@ -1,0 +1,38 @@
+name: explain-shell CI/CD
+run-name: ${{ gitea.actor }} explain-shell Automation 🚀
+on: [push]
+
+jobs:
+ deploy:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Check out repository code
+       uses: actions/checkout@v4
+     - name: create ssh folder
+       run: mkdir -p ~/.ssh
+     - name: setup ssh key
+       run: echo "${{ secrets.GITKEY }}" > ~/.ssh/id_rsa
+     - name: setup ssh key permissions
+       run: chmod 600 ~/.ssh/id_rsa
+     - name: curl dump file
+       run: ssh -o StrictHostKeyChecking=no autopilot@dockge-dev-node10.mgnt.msrls.net "sudo curl -L -o /tmp/dump.gz https://github.com/idank/explainshell/releases/download/db-dump/dump.gz"
+     - name: copy docker files
+       run: scp -o StrictHostKeyChecking=no docker-compose.yml Dockerfile autopilot@dockge-dev-node10.mgnt.msrls.net:/apps/explain-shell
+     - name: copy app files
+       run: scp -ro StrictHostKeyChecking=no explain-shell-app/* autopilot@dockge-dev-node10.mgnt.msrls.net:/apps/explain-shell/data
+     - name: run docker commands
+       run: ssh -o StrictHostKeyChecking=no autopilot@dockge-dev-node10.mgnt.msrls.net "cd /apps/explain-shell/ && sudo docker compose build && sudo docker compose up -d"
+     - name: job status
+       run: echo "This job's status is ${{ job.status }}."
+       
+ post-deploy:
+    runs-on: ubuntu-latest
+    steps:
+     - name: setup ssh key
+       run: echo "${{ secrets.GITKEY }}" > ~/.ssh/id_rsa
+     - name: setup ssh key permissions
+       run: chmod 600 ~/.ssh/id_rsa
+     - name: run commands
+       run: ssh -o StrictHostKeyChecking=no autopilot@dockge-dev-node10.mgnt.msrls.net "cd /apps/explain-shell/ && sudo docker compose exec -T db mongorestore --archive --gzip < /tmp/dump.gz && sudo docker compose exec -T web make tests && sudo docker compose exec -T web bash -c "PYTHONPATH=. python explainshell/manager.py --log info /usr/share/man/man1/echo.1.gz""
+     - name: job status
+       run: echo "This job's status is ${{ job.status }}."

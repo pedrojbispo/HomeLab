@@ -1,0 +1,23 @@
+name: Oauth2-proxy CI/CD
+run-name: ${{ gitea.actor }} Oauth2-proxy Ingress Automation 🚀
+on: [push]
+
+jobs:
+ deploy:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Check out repository code
+       uses: actions/checkout@v4
+     - name: create ssh folder
+       run: mkdir -p ~/.ssh
+     - name: setup ssh key
+       run: echo "${{ secrets.GITKEY }}" > ~/.ssh/id_rsa
+     - name: setup ssh key permissions
+       run: chmod 600 ~/.ssh/id_rsa
+     - name: copy compose files to server
+       run: scp -o StrictHostKeyChecking=no compose.yaml autopilot@dockge-ctl.sys.msrls.net:/apps/oauth2-proxy
+     - name: copy configuration files to server
+       run: scp -ro StrictHostKeyChecking=no conf/* autopilot@dockge-ctl.sys.msrls.net:/apps/oauth2-proxy/conf
+     - name: spin the container up
+       run: ssh -o StrictHostKeyChecking=no autopilot@dockge-ctl.sys.msrls.net "cd /apps/oauth2-proxy && sudo docker compose up -d"
+     - run: echo "This job's status is ${{ job.status }}."

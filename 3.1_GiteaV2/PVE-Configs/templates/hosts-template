@@ -1,0 +1,33 @@
+127.0.0.1 localhost.localdomain localhost
+
+# PVE Names
+172.16.1.1 ptdevpve01.sys.msrls.net ptdevpve01
+
+# PVE Servers
+172.16.1.2 ptdevpve01.sys.msrls.net ptdevpve01
+
+
+
+# PVE PROD Servers
+## PROD01
+192.168.1.5 ptprodpve01.sys.msrls.net ptprodpve01
+172.16.20.50 ptprodpve01.sys.msrls.net ptprodpve01
+172.16.20.150 ptprodpve01.sys.msrls.net ptprodpve01
+## PROD02
+192.168.1.6 ptprodpve02.sys.msrls.net ptprodpve02
+172.16.20.51 ptprodpve02.sys.msrls.net ptprodpve02
+172.16.20.151 ptprodpve02.sys.msrls.net ptprodpve02
+
+
+# DNS Servers
+172.16.100.1 auth-dns01.sys.msrls.net auth-dns01
+172.16.100.2 us-dns01.sys.msrls.net us-dns01
+
+# The following lines are desirable for IPv6 capable hosts
+
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts

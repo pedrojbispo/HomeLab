@@ -1,0 +1,15 @@
+$TTL 2d
+
+$ORIGIN app.msrls.net.
+@                       IN      SOA   ns1.mgnt.msrls.net. mgnt.msrls.net. (
+                                2024110400 ; serial number
+                                12h        ; refresh
+                                15m        ; update retry
+                                3w         ; expiry
+                                2h         ; minimum
+                                )
+
+                        IN              NS                      ns1.mgnt.msrls.net.
+
+
+*                       IN              A                       172.16.100.4

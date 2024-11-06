@@ -1,0 +1,182 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/services
+- Networking:
+    - SP0 ER605:
+        href: https://sp0.infra.msrls.net
+        icon: tp-link
+        description: SP0 ER605
+        siteMonitor: https://sp0.infra.msrls.net
+    - SP1 ER605:
+        href: https://sp1.infra.msrls.net
+        icon: tp-link
+        description: SP1 ER605
+        siteMonitor: https://sp1.infra.msrls.net
+    - SP2 Ubiquiti Edgderouter 4:
+        href: https://sp2.infra.msrls.net
+        icon: ubiquiti
+        description: SP2 Ubiquiti Edgderouter 4
+        siteMonitor: https://sp2.infra.msrls.net
+    - TL-SG1024DE Managed Switch:
+        href: https://sw0.infra.msrls.net
+        icon: tp-link
+        description: TL-SG1024DE Managed Switch
+        siteMonitor: https://sw0.infra.msrls.net
+
+- Proxmox Cluster:
+    - PVE01 Dev Node:
+        href: https://ptdevpve01.infra.msrls.net/
+        icon: proxmox
+        description: PVE01 DEV and CORE Node
+        siteMonitor: https://ptdevpve01.infra.msrls.net/
+        widget:
+           type: proxmox
+           url: https://ptdevpve01.mgnt.msrls.net:8006
+           username: "{{HOMEPAGE_VAR_PROXMOX_USER}}"
+           password: "{{HOMEPAGE_VAR_PROXMOX_API_KEY}}"
+           node: ptdevpve01
+    - PVE02 Dev Node:
+        href: https://ptdevpve02.infra.msrls.net/
+        icon: proxmox
+        description: PVE02 DEV Node
+        siteMonitor: https://ptdevpve02.infra.msrls.net/
+        widget:
+           type: proxmox
+           url: https://ptdevpve02.mgnt.msrls.net:8006
+           username: "{{HOMEPAGE_VAR_PROXMOX_USER}}"
+           password: "{{HOMEPAGE_VAR_PROXMOX_API_KEY}}"
+           node: ptdevpve02   
+    - PVE01 Prod Node:
+        href: https://ptprodpve01.infra.msrls.net
+        icon: proxmox
+        description: PVE01 PROD Node
+        siteMonitor: https://ptprodpve01.infra.msrls.net
+        widget:
+           type: proxmox
+           url: https://ptprodpve01.mgnt.msrls.net:8006
+           username: "{{HOMEPAGE_VAR_PROXMOX_USER}}"
+           password: "{{HOMEPAGE_VAR_PROXMOX_API_KEY}}"
+           node: ptprodpve01
+    - PVE02 Prod Node:
+        href: https://ptprodpve02.infra.msrls.net
+        icon: proxmox
+        description: PVE02 PROD Node
+        siteMonitor: https://ptprodpve02.infra.msrls.net
+        widget:
+           type: proxmox
+           url: https://ptprodpve02.mgnt.msrls.net:8006
+           username: "{{HOMEPAGE_VAR_PROXMOX_USER}}"
+           password: "{{HOMEPAGE_VAR_PROXMOX_API_KEY}}"
+           node: ptprodpve02
+- Systems:
+   - NAS Server:
+        href: https://ptprodnas01v.infra.msrls.net
+        icon: truenas-scale
+        description: Gaia01A TrueNAS
+        siteMonitor: https://ptprodnas01v.infra.msrls.net
+        widget:
+           type: truenas
+           url: https://ptprodnas01v.infra.msrls.net
+           key: "{{HOMEPAGE_VAR_TRUENAS_API_KEY}}" # not required if using username / password
+           enablePools: true # optional, defaults to false
+           nasType: scale # defaults to scale, must be set to 'core' if using enablePools with TrueNAS Core
+   - Pi-Hole Upstream DNS:
+        href: https://us-dns01.internal.msrls.net
+        icon: pi-hole
+        description: Pi-Hole Upstream DNS Server
+        siteMonitor: https://us-dns01.internal.msrls.net
+        widget:
+           type: pihole
+           url: http://us-dns01.mgnt.msrls.net
+           key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}"
+   - Dockge Proxy Controller:
+        href: https://dockge-dev-proxy01.infra.msrls.net
+        icon: dockge-light
+        description: Docker Manager Web UI
+        siteMonitor: https://dockge-dev-proxy01.infra.msrls.net
+   - Internal Nginx Proxy Manager:
+        href: https://dev-proxy.internal.msrls.net/
+        icon: nginx-proxy-manager
+        description: Internal Nginx Reverse Proxy
+        siteMonitor: https://dev-proxy.internal.msrls.net/
+   - phpLDAPAdmin:
+        href: https://ldap.internal.msrls.net/
+        icon: phpldapadmin
+        description: phpLDAPAdmin - web ldap management
+        siteMonitor: https://ldap.internal.msrls.net/
+   - Keycloak:
+        href: https://keycloak.internal.msrls.net/
+        icon: keycloak
+        description: Keycloak SSO
+        siteMonitor: https://keycloak.internal.msrls.net/
+
+- Developer Apps:
+   - Gitea:
+        href: https://gitea.dev.msrls.net
+        icon: gitea
+        description: Gitea Web UI
+        siteMonitor: https://gitea.dev.msrls.net
+        widget:
+         type: gitea
+         url: https://gitea.dev.msrls.net
+         key: "{{HOMEPAGE_VAR_GITEA_API_KEY}}"
+   - Planka:
+        href: https://planka.app.msrls.net
+        icon: planka
+        description: Planka boards (Trello alternative)
+        siteMonitor: https://planka.app.msrls.net
+   - Explain Shell:
+        href: https://explainshell.app.msrls.net
+        icon: shell-tips-light
+        description: Explain Shell commands
+        siteMonitor: https://explainshell.app.msrls.net
+   - IT-Tools:
+        href: https://it-tools.app.msrls.net
+        icon: it-tools-light
+        description: Handy IT Tools Page
+        siteMonitor: https://it-tools.app.msrls.net
+
+- Monitoring Apps:
+   - Grafana:
+        href: https://grafana.monitor.msrls.net
+        icon: grafana
+        description: Grafana metrics dashboard
+        siteMonitor: https://grafana.monitor.msrls.net
+   - Prometheus:
+        href: https://prometheus.monitor.msrls.net
+        icon: prometheus
+        description: Prometheus metrics collector
+        siteMonitor: https://prometheus.monitor.msrls.net
+   - Uptime-Kuma:
+        href: https://uptime-kuma.monitor.msrls.net
+        icon: uptime-kuma
+        description: Uptime-Kuma Web UI
+        siteMonitor: https://uptime-kuma.monitor.msrls.net
+   - InfluxDB:
+        href: https://influxdb.monitor.msrls.net
+        icon: influxdb
+        description: influxdb Web UI
+        siteMonitor: https://influxdb.monitor.msrls.net
+   - Zabbix:
+        href: https://zabbix.monitor.msrls.net
+        icon: zabbix
+        description: Zabbix Web UI
+        siteMonitor: https://zabbix.monitor.msrls.net
+#   - Uptime-Kuma DC Status:
+#        href: https://dc.monitor.msrls.net/
+#        icon: https://kuma-adm.dev.msrls.net/upload/logo1.png?t=1720886749862
+#        description: Uptime-Kuma Datacenter Status Page
+#        siteMonitor: https://dc.monitor.msrls.net/
+#        widget:
+#          type: uptimekuma
+#           url: https://kuma-adm.dev.msrls.net
+#           slug: dc
+#   - Uptime-Kuma DC Components Status:
+#        href: https://dc-comp.monitor.msrls.net/
+#        icon: https://kuma-adm.dev.msrls.net/upload/logo1.png?t=1720886749862
+#        description: Uptime-Kuma Datacenter Status Page
+#        siteMonitor: https://dc-comp.monitor.msrls.net/
+#        widget:
+#           type: uptimekuma
+#           url: https://kuma-adm.dev.msrls.net
+#           slug: dc-comp

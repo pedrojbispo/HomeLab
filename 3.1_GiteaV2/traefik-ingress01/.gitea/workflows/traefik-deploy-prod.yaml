@@ -1,0 +1,24 @@
+name: Traefik Ingress CI/CD
+run-name: ${{ gitea.actor }} Traefik Ingress Automation 🚀
+on:
+   push:
+     branches:
+       - main
+       - 'data/**'
+jobs:
+ deploy:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Check out repository code
+       uses: actions/checkout@v4
+     - name: create ssh folder
+       run: mkdir -p ~/.ssh
+     - name: setup ssh key
+       run: echo "${{ secrets.GITKEY }}" > ~/.ssh/id_rsa
+     - name: setup ssh key permissions
+       run: chmod 600 ~/.ssh/id_rsa
+     - name: copy compose files to server
+       run: scp -o StrictHostKeyChecking=no compose.yaml autopilot@dockge-ctl.sys.msrls.net:/apps/traefik-ingress-01/
+     - name: copy configuration files to server
+       run: scp -ro StrictHostKeyChecking=no data/* autopilot@dockge-ctl.sys.msrls.net:/apps/traefik-ingress-01/data
+     - run: echo "This job's status is ${{ job.status }}."

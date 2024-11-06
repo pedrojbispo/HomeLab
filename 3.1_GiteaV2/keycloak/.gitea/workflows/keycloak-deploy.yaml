@@ -1,0 +1,23 @@
+name: Keycloak CI/CD
+run-name: ${{ gitea.actor }} Keycloak Automation 🚀
+on: [push]
+
+jobs:
+ deploy:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Check out repository code
+       uses: actions/checkout@v4
+     - name: create ssh folder
+       run: mkdir -p ~/.ssh
+     - name: setup ssh key
+       run: echo "${{ secrets.GITKEY }}" > ~/.ssh/id_rsa
+     - name: setup ssh key permissions
+       run: chmod 600 ~/.ssh/id_rsa
+     - name: copy environment file to server
+       run: scp -o StrictHostKeyChecking=no .env autopilot@dockge-dev-node04.mgnt.msrls.net:/apps/keycloak
+     - name: copy compose files to server
+       run: scp -ro StrictHostKeyChecking=no compose.yaml autopilot@dockge-dev-node04.mgnt.msrls.net:/apps/keycloak
+     - name: spin up the container
+       run: ssh -o StrictHostKeyChecking=no autopilot@dockge-dev-node04.mgnt.msrls.net "cd /apps/keycloak && sudo docker compose up -d"
+     - run: echo "This job's status is ${{ job.status }}."

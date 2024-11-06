@@ -1,0 +1,29 @@
+name: LDAP Stack CI/CD
+run-name: ${{ gitea.actor }} LDAP Stack Automation 🚀
+on: [push]
+
+jobs:
+ deploy:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Check out repository code
+       uses: actions/checkout@v4
+     - name: create ssh folder
+       run: mkdir -p ~/.ssh
+     - name: setup ssh key
+       run: echo "${{ secrets.GITKEY }}" > ~/.ssh/id_rsa
+     - name: setup ssh key permissions
+       run: chmod 600 ~/.ssh/id_rsa
+     - name: setup file ownership
+       run: ssh -o StrictHostKeyChecking=no autopilot@dockge-dev-node04.mgnt.msrls.net "sudo chown -R dockge:dockge /apps/ldap-stack && sudo chown -R dockge:dockge /apps/ldap-stack/phpldap && sudo chmod -R 776 /apps/ldap-stack/phpldap"
+     - name: copy docker compose file to server
+       run: scp -o StrictHostKeyChecking=no compose.yaml autopilot@dockge-dev-node04.mgnt.msrls.net:/apps/ldap-stack
+     - name: copy phpldapadmin config file to server
+       run: scp -ro StrictHostKeyChecking=no config/* autopilot@dockge-dev-node04.mgnt.msrls.net:/apps/ldap-stack/phpldap/admin/config\
+     - name: copy phpldapadmin custom creation template files to server
+       run: scp -ro StrictHostKeyChecking=no template/creation/* autopilot@dockge-dev-node04.mgnt.msrls.net:/apps/ldap-stack/phpldap/admin/templates/creation
+     - name: copy phpldapadmin custom modfication template files to server
+       run: scp -ro StrictHostKeyChecking=no template/modification/* autopilot@dockge-dev-node04.mgnt.msrls.net:/apps/ldap-stack/phpldap/admin/templates/modification
+     - name: spin up the container
+       run: ssh -o StrictHostKeyChecking=no autopilot@dockge-dev-node04.mgnt.msrls.net "cd /apps/ldap-stack/ && sudo docker compose up -d --force-recreate"
+     - run: echo "This job's status is ${{ job.status }}."

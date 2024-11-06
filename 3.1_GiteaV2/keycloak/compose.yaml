@@ -1,0 +1,50 @@
+version: "3.3"
+services:
+  postgres:
+    image: postgres:16.2
+    hostname: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.1
+    hostname: keycloak
+    user: "999"
+    ports:
+      - 8080:8080
+      - 8443:8443
+      #- 9000:9000
+    volumes:
+      - keycloak_data:/data
+      - ./keycloak/providers:/opt/jboss/keycloak/providers
+      - ./keycloak/standalone/configuration:/opt/jboss/keycloak/standalone/configuration
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${KEYCLOAK_ADMIN}
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_HOSTNAME=keycloak.internal.msrls.net
+      - KC_PROXY_HEADERS=xforwarded
+      - KC_HOSTNAME_PORT=8080
+      - KC_HTTPS_PORT=8443
+      - KC_HTTP_MANAGEMENT_PORT=9000
+      - KC_HTTP_ENABLED=true
+      - KC_HEALTH_ENABLED=true
+     # - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+     # - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres/${POSTGRES_DB}
+      - KC_DB_USERNAME=${POSTGRES_USER}
+      - KC_DB_PASSWORD=${POSTGRES_PASSWORD}
+    command: start
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+    driver: local
+  keycloak_data:
+    driver: local
+networks: {}

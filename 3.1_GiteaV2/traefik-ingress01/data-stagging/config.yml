@@ -1,0 +1,321 @@
+http:
+  routers:
+    dashboard:
+      entryPoints:
+        - "https"
+      rule: Host(`traefik.infra.msrls.net`)
+      middlewares:
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "infra.msrls.net"
+            sans:
+              - "traefik.infra.msrls.net"
+      service: traefiki-api
+###############################################################
+# Networking Zones
+###############################################################
+    #SP0 Router
+    sp0:
+      entryPoints:
+        - "https"
+      rule: "Host(`sp0.infra.msrls.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "infra.msrls.net"
+            sans:
+              - "sp0.infra.msrls.net"
+      service: sp0
+###############################################################
+    #SP1 Router
+    sp1:
+      entryPoints:
+        - "https"
+      rule: "Host(`sp1.infra.msrls.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "infra.msrls.net"
+            sans:
+              - "sp1.infra.msrls.net"
+      service: sp1
+###############################################################
+    #SP2 Router
+    sp2:
+      entryPoints:
+        - "https"
+      rule: "Host(`sp2.infra.msrls.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "infra.msrls.net"
+            sans:
+              - "sp2.infra.msrls.net"
+      service: sp2
+###############################################################
+    #SP2 Router
+    sw:
+      entryPoints:
+        - "https"
+      rule: "Host(`sw.infra.msrls.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "infra.msrls.net"
+            sans:
+              - "sw.infra.msrls.net"
+      service: sw
+###############################################################
+# Proxmox Nodes
+###############################################################
+    #Proxmox Router
+    proxmox:
+      entryPoints:
+        - "https"
+      rule: "Host(`pve.infra.msrls.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "infra.msrls.net"
+            sans:
+              - "pve.infra.msrls.net"
+      service: proxmox
+###############################################################
+# TrueNAS Nodes
+###############################################################
+    #TrueNas Router
+    truenas:
+      entryPoints:
+        - "https"
+      rule: "Host(`nas.infra.msrls.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "infra.msrls.net"
+            sans:
+              - "nas.infra.msrls.net"
+      service: truenas
+###############################################################
+# DNS Zone
+###############################################################
+    #PiHole Upstream DNS Router
+    usdns01:
+      entryPoints:
+        - "https"
+      rule: "Host(`us-dns.infra.msrls.net`)"
+      middlewares:
+        - admin-redirect
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "infra.msrls.net"
+            sans:
+              - "us-dns.infra.msrls.net"
+      service: usdns01
+###############################################################
+# Dockge Nodes
+###############################################################
+    #Dockge Router
+    dockgectl:
+      entryPoints:
+        - "https"
+      rule: "Host(`dockge-ctl-test.infra.msrls.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "infra.msrls.net"
+            sans:
+              - "dockge-ctl-test.infra.msrls.net"
+      service: dockgectl
+##############################################################
+###############################################################
+# Auth Zones
+###############################################################
+    #ldap Router
+    ldap:
+      entryPoints:
+        - "https"
+      rule: "Host(`ldap.auth.msrls.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "auth.msrls.net"
+            sans:
+              - "ldap.auth.msrls.net"
+      service: ldap
+###############################################################
+    #keycloak Router
+    keycloak:
+      entryPoints:
+        - "https"
+      rule: "Host(`keycloak.auth.msrls.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls:
+        certResolver: "cloudflare"
+        domains:
+          - main: "auth.msrls.net"
+            sans:
+              - "keycloak.auth.msrls.net"
+      service: keycloak
+###############################################################
+###############################################################
+#endregion
+###############################################################
+#region services
+  services:
+    traefiki-api:
+      loadBalancer:
+        servers:
+          - url: "http://dockge-ctl-test.sys.msrls.net:8080/dashboard/"
+        passHostHeader: true
+###############################################################
+# Network Services
+###############################################################
+    sp0:
+      loadBalancer:
+        servers:
+          - url: "https://172.16.0.1/"
+        passHostHeader: true
+###############################################################
+    sp1:
+      loadBalancer:
+        servers:
+          - url: "https://172.16.0.2/"
+        passHostHeader: true
+###############################################################
+    sp2:
+      loadBalancer:
+        servers:
+          - url: "https://172.16.0.3/"
+        passHostHeader: true
+###############################################################
+    sw:
+      loadBalancer:
+        servers:
+          - url: "http://172.16.0.10/"
+        passHostHeader: true
+###############################################################
+# Proxmox & TrueNAS Services
+###############################################################
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: "https://ptdevpve01.sys.msrls.net:8006"
+            weight: 1000
+          - url: "https://ptprdpve02.sys.msrls.net:8006"
+            weight: 500
+          - url: "https://ptprdpve03.sys.msrls.net:8006"
+            weight: 250
+        passHostHeader: true
+###############################################################
+    truenas:
+      loadBalancer:
+        servers:
+          - url: "https://ptprdnas01v.sys.msrls.net"
+        passHostHeader: true
+###############################################################
+# DNS Services
+###############################################################
+    usdns01:
+      loadBalancer:
+        servers:
+          - url: "http://us-dns01.sys.msrls.net"
+        passHostHeader: true
+###############################################################
+# Dockge Services
+###############################################################
+    dockgectl:
+      loadBalancer:
+        servers:
+          - url: "http://dockge-ctl-test.sys.msrls.net:10000"
+        passHostHeader: true
+###############################################################
+# Auth services
+###############################################################
+    ldap:
+      loadBalancer:
+        servers:
+          - url: "http://auth-node01.sys.msrls.net:8399"
+        passHostHeader: true
+###############################################################
+    keycloak:
+      loadBalancer:
+        servers:
+          - url: "http://auth-node01.sys.msrls.net:8080"
+        passHostHeader: true
+###############################################################
+###############################################################
+#endregion
+###############################################################
+###############################################################
+# Middlewares Region
+###############################################################
+  middlewares:
+    https-redirectscheme:
+      redirectScheme:
+        scheme: https
+        permanent: true
+###############################################################
+    default-headers:
+      headers:
+        frameDeny: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+###############################################################
+    default-whitelist:
+      ipAllowList:
+        sourceRange:
+        - "10.0.0.0/8"
+        - "192.168.0.0/16"
+        - "172.16.0.0/12"
+###############################################################
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers
+        - admin-redirect
+###############################################################
+    admin-redirect:
+      addPrefix:
+        prefix: "/admin"
+###############################################################
+###############################################################
+#EOF

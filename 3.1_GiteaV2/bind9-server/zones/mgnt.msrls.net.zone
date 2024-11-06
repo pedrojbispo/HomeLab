@@ -1,0 +1,53 @@
+$TTL 2d
+
+$ORIGIN mgnt.msrls.net.
+@                       IN      SOA   ns1.mgnt.msrls.net. mgnt.msrls.net. (
+                                2024110400 ; serial number
+                                12h        ; refresh
+                                15m        ; update retry
+                                3w         ; expiry
+                                2h         ; minimum
+                                )
+
+                        IN              NS                      ns1.mgnt.msrls.net.
+
+ns1                     IN              A                       172.16.100.1
+
+
+; -- network 
+
+sp0                 IN              A                   172.16.0.1
+sp1                 IN              A                   172.16.0.2
+sp2                 IN              A                   172.16.0.3
+sw0                 IN              A                   192.168.10.1
+
+; -- pve servers
+
+ptdevpve01          IN              A                   192.168.10.2
+ptdevpve02          IN              A                   192.168.10.3
+ptprodpve01         IN              A                   192.168.10.4
+ptprodpve02         IN              A                   192.168.10.5
+
+; -- nas servers
+
+ptprodnas01v        IN              A                   172.16.100.3
+
+; -- dns servers
+
+auth-dns01          IN              A                   172.16.100.1
+us-dns01            IN              A                   172.16.100.2
+
+; -- apps servers
+
+dockge-dev-proxy01      IN              A                   172.16.100.4
+dockge-dev-node01       IN              A                   172.16.100.5
+dockge-dev-node02       IN              A                   172.16.100.6
+dockge-dev-node03       IN              A                   172.16.100.7
+dockge-dev-node04       IN              A                   172.16.100.8
+dockge-dev-node10       IN              A                   172.16.110.1
+dockge-dev-node11       IN              A                   172.16.110.2
+
+
+dockge-prod-proxy01     IN              A                   10.0.0.1
+dockge-prod-node01      IN              A                   10.0.0.2
+prod-wings01            IN              A                   10.0.0.10

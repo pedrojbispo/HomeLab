@@ -1,0 +1,45 @@
+name: DNS BIND9 CI/CD
+run-name: ${{ gitea.actor }} Bind9 Automation 🚀
+on: [push]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Check for files
+        run: |
+          ls -lhrt
+      - name: install bind9
+        run: |
+          apt update && apt install -y bind9 bind9utils bind9-doc
+      - name: check file
+        run: |
+          named-checkconf named.conf
+          named-checkzone mgnt.msrls.net zones/mgnt.msrls.net.zone
+          named-checkzone infra.msrls.net zones/infra.msrls.net.zone
+          named-checkzone dev.msrls.net zones/dev.msrls.net.zone
+          named-checkzone app.msrls.net zones/app.msrls.net.zone
+          named-checkzone internal.msrls.net zones/internal.msrls.net.zone
+          named-checkzone monitor.msrls.net zones/monitor.msrls.net.zone
+
+  deploy:
+    needs: [validate]
+    runs-on: ubuntu-latest
+    steps:
+     - name: Check out repository code
+       uses: actions/checkout@v4
+     - name: create ssh folder
+       run: mkdir -p ~/.ssh
+     - name: setup ssh key
+       run: echo "${{ secrets.GITKEY }}" > ~/.ssh/id_rsa
+     - name: setup ssh key permissions
+       run: chmod 600 ~/.ssh/id_rsa
+     - name: copy named.conf to server
+       run: scp -o StrictHostKeyChecking=no named.conf autopilot@auth-dns01.mgnt.msrls.net:/etc/bind
+     - name: copy zones to server
+       run: scp -ro StrictHostKeyChecking=no zones/* autopilot@auth-dns01.mgnt.msrls.net:/app/dns/zones
+     - name: apply changes on server
+       run: ssh -o StrictHostKeyChecking=no autopilot@auth-dns01.mgnt.msrls.net "sudo rndc reload"
+     - run: echo "This job's status is ${{ job.status }}."
